@@ -1,0 +1,21 @@
+{
+  "env": {
+    "commonjs": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": "standard",
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "ignorePatterns": ["**/node_modules/*", "**/public/*"],
+  "rules": {
+    "no-unused-vars": "off",
+    "no-return-assign": "off",
+    "array-callback-return": "off",
+    "n/handle-callback-err": "off",
+    "no-unused-expressions": "off",
+    "no-unneeded-ternary": "off"
+  }
+}
