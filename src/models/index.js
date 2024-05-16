@@ -6,12 +6,12 @@ mongoose.Promise = global.Promise
 const db = {}
 
 db.mongoose = mongoose
-db.URL = CONFIG.URL
+db.LOCAL = CONFIG.LOCAL
 
 db.User = require('./user.model')(mongoose)
-db.barbers = require('./barber.model')(mongoose)
-db.customers = require('./customer.model')(mongoose)
-db.bookings = require('./booking.model')(mongoose)
-db.services = require('./service.model')(mongoose)
+db.Barber = require('./barber.model')(mongoose)
+db.Customer = require('./customer.model')(mongoose)
+db.Booking = require('./booking.model')(mongoose)
+db.Service = require('./service.model')(mongoose)
 
 module.exports = db

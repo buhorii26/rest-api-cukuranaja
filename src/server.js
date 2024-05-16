@@ -19,8 +19,12 @@ app.use((req, res, next) => {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+// routes
 app.use('/api/auth', require('./routes/authRoutes'))
 app.use('/api/bookings', require('./routes/bookingRoutes'))
+app.use('/api/customers', require('./routes/customerRoutes'))
+app.use('/api/barbers', require('./routes/barberRoutes'))
+app.use('/api/services', require('./routes/serviceRoutes'))
 
 // port
 const port = CONFIG.PORT

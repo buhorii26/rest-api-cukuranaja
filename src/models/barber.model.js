@@ -1,48 +1,45 @@
 // membuat schema
-module.exports = (mongoose) => {
-  const barberSchema =
-    mongoose.Schema(
-      {
-        userId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-          required: true
-        },
-        barberName: {
-          type: String,
-          required: true
-        },
-        address: {
-          type: String,
-          required: true
-        },
-        city: {
-          type: String,
-          required: true
-        },
-        province: {
-          type: String,
-          required: true
-        },
-        noHp: {
-          type: String,
-          required: true
-        },
-        pengalaman: {
-          type: String
-        },
-        skills: {
-          type: String
-        }
-      }
-    )
-  barberSchema.method('toJSON', function () {
-    const { __v, _id, ...object } = this.toObject()
-    object.barberId = _id
-    return object
-  })
+const mongoose = require('mongoose')
 
-  const Barber = mongoose.model('barbers', barberSchema)
+const BarberSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  barberName: {
+    type: String,
+    required: true
+  },
+  address: {
+    type: String,
+    required: true
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  province: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: String,
+    required: true
+  },
+  experience: {
+    type: String,
+    required: true
+  },
+  skills: {
+    type: String,
+    required: true
+  }
+})
 
-  return Barber
-}
+BarberSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject()
+  object.barberId = _id
+  return object
+})
+module.exports = mongoose.model('Barber', BarberSchema)

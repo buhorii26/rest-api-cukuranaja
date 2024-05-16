@@ -1,25 +1,23 @@
-module.exports = (mongoose) => {
-  const serviceSchema =
-    mongoose.Schema({
-      barberId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true
-      },
-      service_name: {
-        type: String,
-        required: true
-      },
-      total_price: {
-        type: Number,
-        required: true
-      }
-    })
-  serviceSchema.method('toJSON', function () {
-    const { __v, _id, ...object } = this.toObject()
-    object.serviceId = _id
-    return object
-  })
+const mongoose = require('mongoose')
 
-  const Service = mongoose.model('services', serviceSchema)
-  return Service
-}
+const ServiceSchema = new mongoose.Schema({
+  barberId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  serviceName: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  }
+})
+
+ServiceSchema.method('toJSON', function () {
+  const { __v, _id, ...object } = this.toObject()
+  object.serviceId = _id
+  return object
+})
+module.exports = mongoose.model('Service', ServiceSchema)
