@@ -3,6 +3,11 @@ const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser')
 const { CONFIG } = require('./config/db.config')
+const authRoutes = require('./routes/authRoutes')
+const bookingRoutes = require('./routes/bookingRoutes')
+const customerRoutes = require('./routes/customerRoutes')
+const barberRoutes = require('./routes/barberRoutes')
+const serviceRoutes = require('./routes/serviceRoutes')
 
 // connect to database
 require('./utils/connectDB')
@@ -20,11 +25,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 // routes
-app.use('/api/auth', require('./routes/authRoutes'))
-app.use('/api/bookings', require('./routes/bookingRoutes'))
-app.use('/api/customers', require('./routes/customerRoutes'))
-app.use('/api/barbers', require('./routes/barberRoutes'))
-app.use('/api/services', require('./routes/serviceRoutes'))
+app.use('/api/auth', authRoutes)
+app.use('/api/bookings', bookingRoutes)
+app.use('/api/customers', customerRoutes)
+app.use('/api/barbers', barberRoutes)
+app.use('/api/services', serviceRoutes)
 
 // port
 const port = CONFIG.PORT

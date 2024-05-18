@@ -44,7 +44,7 @@ exports.register = async (req, res) => {
 
     jwt.sign(
       payload,
-      'your_jwt_secret',
+      'my_jwt_secret',
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err
@@ -81,7 +81,7 @@ exports.login = async (req, res) => {
 
     jwt.sign(
       payload,
-      'your_jwt_secret',
+      'my_jwt_secret',
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err

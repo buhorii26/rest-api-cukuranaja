@@ -1,17 +1,20 @@
 const jwt = require('jsonwebtoken')
+const jwtSecret = 'my_jwt_secret'
 
-module.exports = function (req, res, next) {
-  const token = req.header('x-auth-token')
+function authMiddleware (req, res, next) {
+  const token = req.header('Authorization')
 
   if (!token) {
     return res.status(401).json({ msg: 'No token, authorization denied' })
   }
 
   try {
-    const decoded = jwt.verify(token, 'your_jwt_secret')
-    req.users = decoded.users
+    const decoded = jwt.verify(token.split(' ')[1], jwtSecret)
+    req.user = decoded.user
     next()
   } catch (err) {
     res.status(401).json({ msg: 'Token is not valid' })
   }
 }
+
+module.exports = authMiddleware

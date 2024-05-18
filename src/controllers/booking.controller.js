@@ -1,13 +1,24 @@
 const Booking = require('../models/booking.model')
+const Customer = require('../models/customer.model')
+const Barber = require('../models/barber.model')
+const Service = require('../models/service.model')
 
 // create booking
 exports.createBooking = async (req, res) => {
   try {
-    const { customerId, barberId, serviceId, date, time, price, status } = req.body
+    const { customer, barber, service, date, time, price, status } = req.body
+    // Validate customer, barber, and service exist
+    const foundCustomer = await Customer.findById(customer)
+    const foundBarber = await Barber.findById(barber)
+    const foundService = await Service.findById(service)
+
+    if (!foundCustomer || !foundBarber || !foundService) {
+      return res.status(400).json({ msg: 'Invalid customer, barber, or service ID' })
+    }
     const newBooking = new Booking({
-      customerId,
-      barberId,
-      serviceId,
+      customer,
+      barber,
+      service,
       date,
       time,
       price,
@@ -25,8 +36,8 @@ exports.createBooking = async (req, res) => {
 // Get all booking
 exports.getBookings = async (req, res) => {
   try {
-    const booking = await Booking.find()
-    res.json(booking.map(booking => booking.toJSON()))
+    const bookings = await Booking.find().populate('customer').populate('barber').populate('service')
+    res.json(bookings.map(booking => booking.toJSON()))
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -36,7 +47,7 @@ exports.getBookings = async (req, res) => {
 // Get a booking by ID
 exports.getBookingById = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id)
+    const booking = await Booking.findById(req.params.id).populate('customer').populate('barber').populate('service')
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
@@ -50,14 +61,14 @@ exports.getBookingById = async (req, res) => {
 // Update a booking by ID
 exports.updateBooking = async (req, res) => {
   try {
-    const { customerId, barberId, serviceId, date, time, price, status } = req.body
+    const { customer, barber, service, date, time, price, status } = req.body
     const booking = await Booking.findById(req.params.id)
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
-    booking.customerId = customerId || booking.customerId
-    booking.barberId = barberId || booking.barberId
-    booking.serviceId = serviceId || booking.serviceId
+    booking.customer = customer || booking.customer
+    booking.barber = barber || booking.barber
+    booking.service = service || booking.service
     booking.date = date || booking.date
     booking.time = time || booking.time
     booking.price = price || booking.price
