@@ -6,19 +6,25 @@ const Service = require('../models/service.model')
 // create booking
 exports.createBooking = async (req, res) => {
   try {
-    const { customer, barber, service, date, time, price, status } = req.body
+    const { customerId, barberId, serviceId, date, time, price, status } = req.body
     // Validate customer, barber, and service exist
-    const foundCustomer = await Customer.findById(customer)
-    const foundBarber = await Barber.findById(barber)
-    const foundService = await Service.findById(service)
+    const foundCustomer = await Customer.findById(customerId)
+    const foundBarber = await Barber.findById(barberId)
+    const foundService = await Service.findById(serviceId)
 
-    if (!foundCustomer || !foundBarber || !foundService) {
-      return res.status(400).json({ msg: 'Invalid customer, barber, or service ID' })
+    if (!foundCustomer) {
+      return res.status(400).json({ msg: 'Invalid customer ID, not found!' })
+    }
+    if (!foundBarber) {
+      return res.status(400).json({ msg: 'Invalid barber ID, not found!' })
+    }
+    if (!foundService) {
+      return res.status(400).json({ msg: 'Invalid service ID, not found' })
     }
     const newBooking = new Booking({
-      customer,
-      barber,
-      service,
+      customerId,
+      barberId,
+      serviceId,
       date,
       time,
       price,
