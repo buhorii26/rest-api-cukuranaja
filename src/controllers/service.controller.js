@@ -17,7 +17,13 @@ exports.createService = async (req, res) => {
 exports.getServices = async (req, res) => {
   try {
     const services = await Service.find()
-    res.json(services.map(service => service.toJSON()))
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: {
+        services
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -28,10 +34,16 @@ exports.getServices = async (req, res) => {
 exports.getServiceById = async (req, res) => {
   try {
     const service = await Service.findById(req.params.id)
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: {
+        service
+      }
+    })
     if (!service) {
       return res.status(404).json({ error: 'Service not found' })
     }
-    res.json(service.toJSON())
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -50,7 +62,13 @@ exports.updateService = async (req, res) => {
     service.serviceName = serviceName || service.serviceName
     service.price = price || service.price
     await service.save()
-    res.json(service.toJSON())
+    res.json({
+      status: 'success',
+      message: 'service updated success',
+      data: {
+        service
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })

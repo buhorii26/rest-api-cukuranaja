@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const auth = require('../middleware/authMiddleware')
 const {
   createService,
   getServices,
@@ -8,10 +9,10 @@ const {
   deleteService
 } = require('../controllers/service.controller')
 
-router.post('/', createService)
-router.get('/', getServices)
-router.get('/:id', getServiceById)
-router.put('/:id', updateService)
-router.delete('/:id', deleteService)
+router.post('/', auth, createService)
+router.get('/', auth, getServices)
+router.get('/:id', auth, getServiceById)
+router.put('/:id', auth, updateService)
+router.delete('/:id', auth, deleteService)
 
 module.exports = router

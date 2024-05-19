@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const auth = require('../middleware/authMiddleware')
 const {
   createBarber,
   getBarbers,
@@ -8,10 +9,10 @@ const {
   deleteBarber
 } = require('../controllers/barber.controller')
 
-router.post('/', createBarber)
-router.get('/', getBarbers)
-router.get('/:id', getBarberById)
-router.put('/:id', updateBarber)
-router.delete('/:id', deleteBarber)
+router.post('/', auth, createBarber)
+router.get('/', auth, getBarbers)
+router.get('/:id', auth, getBarberById)
+router.put('/:id', auth, updateBarber)
+router.delete('/:id', auth, deleteBarber)
 
 module.exports = router

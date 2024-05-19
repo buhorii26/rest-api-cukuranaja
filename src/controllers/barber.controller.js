@@ -17,7 +17,13 @@ exports.createBarber = async (req, res) => {
 exports.getBarbers = async (req, res) => {
   try {
     const barbers = await Barber.find()
-    res.json(barbers.map(barber => barber.toJSON()))
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: {
+        barbers
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -28,10 +34,16 @@ exports.getBarbers = async (req, res) => {
 exports.getBarberById = async (req, res) => {
   try {
     const barber = await Barber.findById(req.params.id)
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: {
+        barber
+      }
+    })
     if (!barber) {
       return res.status(404).json({ error: 'Barber not found' })
     }
-    res.json(barber.toJSON())
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -56,7 +68,13 @@ exports.updateBarber = async (req, res) => {
     barber.experience = experience || barber.experience
     barber.skills = skills || barber.skills
     await barber.save()
-    res.json(barber.toJSON())
+    res.json({
+      status: 'success',
+      message: 'barber updated success',
+      data: {
+        barber
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -70,7 +88,10 @@ exports.deleteBarber = async (req, res) => {
     if (!barber) {
       return res.status(404).json({ error: 'Barber not found' })
     }
-    res.json({ msg: 'Barber deleted' })
+    res.json({
+      status: 'success',
+      message: 'Barber deleted'
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })

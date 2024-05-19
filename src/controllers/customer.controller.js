@@ -14,10 +14,16 @@ exports.createCustomer = async (req, res) => {
 }
 
 // Get all customers
-exports.getCustomers = async (req, res) => {
+exports.getAllCustomers = async (req, res) => {
   try {
     const customers = await Customer.find()
-    res.json(customers.map(customer => customer.toJSON()))
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: {
+        customers
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -28,10 +34,16 @@ exports.getCustomers = async (req, res) => {
 exports.getCustomerById = async (req, res) => {
   try {
     const customer = await Customer.findById(req.params.id)
+    res.json({
+      status: 'success',
+      message: 'ok',
+      data: {
+        customer
+      }
+    })
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' })
     }
-    res.json(customer.toJSON())
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -54,7 +66,13 @@ exports.updateCustomer = async (req, res) => {
     customer.province = province || customer.province
     customer.phone = phone || customer.phone
     await customer.save()
-    res.json(customer.toJSON())
+    res.json({
+      status: 'success',
+      message: 'customer updated success',
+      data: {
+        customer
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -68,7 +86,10 @@ exports.deleteCustomer = async (req, res) => {
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' })
     }
-    res.json({ msg: 'Customer deleted' })
+    res.json({
+      status: 'success',
+      message: 'Customer deleted'
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })

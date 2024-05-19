@@ -11,7 +11,9 @@ exports.register = async (req, res) => {
   }
   // Custom password validation
   if (password.length < 8) {
-    return res.status(400).json({ msg: 'Password must be at least 8 characters long' })
+    return res
+      .status(400)
+      .json({ msg: 'Password must be at least 8 characters long' })
   }
 
   if (!name || !email || !password) {
@@ -42,15 +44,16 @@ exports.register = async (req, res) => {
       }
     }
 
-    jwt.sign(
-      payload,
-      'my_jwt_secret',
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err
-        res.json({ token, user })
-      }
-    )
+    jwt.sign(payload, 'my_jwt_secret', { expiresIn: 360000 }, (err, token) => {
+      if (err) throw err
+      res.json({
+        status: 'success',
+        message: 'User Created',
+        data: {
+          user
+        }
+      })
+    })
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server error')
@@ -79,15 +82,16 @@ exports.login = async (req, res) => {
       }
     }
 
-    jwt.sign(
-      payload,
-      'my_jwt_secret',
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err
-        res.json({ token, user })
-      }
-    )
+    jwt.sign(payload, 'my_jwt_secret', { expiresIn: 360000 }, (err, token) => {
+      if (err) throw err
+      res.json({
+        status: 'success',
+        message: 'user logged in',
+        data: {
+          token
+        }
+      })
+    })
   } catch (err) {
     console.error(err.message)
     res.status(500).send('Server error')
