@@ -4,5 +4,5 @@ const auth = require('../middleware/authMiddleware')
 const { getAllUsers, getUserById } = require('../controllers/user.controller')
 
 router.get('/', getAllUsers)
-router.get('/:id', auth, getUserById)
+router.get('/me', auth, getUserById)
 module.exports = router

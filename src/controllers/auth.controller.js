@@ -1,6 +1,7 @@
 const User = require('../models/user.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const jwtSecret = 'my_jwt_secret'
 
 exports.register = async (req, res) => {
   const { name, email, password } = req.body
@@ -44,13 +45,14 @@ exports.register = async (req, res) => {
       }
     }
 
-    jwt.sign(payload, 'my_jwt_secret', { expiresIn: 360000 }, (err, token) => {
+    jwt.sign(payload, jwtSecret, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err
       res.json({
         status: 'success',
         message: 'User Created',
         data: {
-          user
+          user,
+          token
         }
       })
     })
@@ -82,7 +84,7 @@ exports.login = async (req, res) => {
       }
     }
 
-    jwt.sign(payload, 'my_jwt_secret', { expiresIn: 360000 }, (err, token) => {
+    jwt.sign(payload, jwtSecret, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err
       res.json({
         status: 'success',
