@@ -6,7 +6,13 @@ exports.createService = async (req, res) => {
     const { barberId, serviceName, price } = req.body
     const service = new Service({ barberId, serviceName, price })
     await service.save()
-    res.status(201).json(service.toJSON())
+    res.status(201).json({
+      status: 'success',
+      message: 'Create New Service Success',
+      data: {
+        service
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })

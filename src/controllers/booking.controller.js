@@ -32,7 +32,13 @@ exports.createBooking = async (req, res) => {
     })
 
     await newBooking.save()
-    res.status(201).json(newBooking.toJSON())
+    res.status(201).json({
+      status: 'success',
+      message: 'Create New Booking Success',
+      data: {
+        newBooking
+      }
+    })
   } catch (error) {
     console.error(error.message)
     res.status(500).send('Server error')
@@ -43,7 +49,13 @@ exports.createBooking = async (req, res) => {
 exports.getBookings = async (req, res) => {
   try {
     const bookings = await Booking.find().populate('customer').populate('barber').populate('service')
-    res.json(bookings.map(booking => booking.toJSON()))
+    res.json({
+      success: true,
+      message: 'all bookings retrieved',
+      data: {
+        bookings
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -57,7 +69,13 @@ exports.getBookingById = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
-    res.json(booking.toJSON())
+    res.json({
+      status: 'success',
+      message: 'Booking By id Success retrived',
+      data: {
+        booking
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -80,7 +98,13 @@ exports.updateBooking = async (req, res) => {
     booking.price = price || booking.price
     booking.status = status || booking.status
     await booking.save()
-    res.json(booking.toJSON())
+    res.json({
+      status: 'success',
+      message: 'booking updated success',
+      data: {
+        booking
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
@@ -94,7 +118,10 @@ exports.deleteBooking = async (req, res) => {
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
-    res.json({ msg: 'Booking success deleted' })
+    res.json({
+      status: 'success',
+      message: 'Booking deleted'
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })

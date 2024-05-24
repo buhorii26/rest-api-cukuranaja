@@ -4,9 +4,27 @@ const Customer = require('../models/customer.model')
 exports.createCustomer = async (req, res) => {
   try {
     const { id, customerName, gender, address, city, province, phone } = req.body
+    // Cek duplikat berdasarkan id user
+    const existingUserById = await Customer.findOne({ id })
+    if (existingUserById) {
+      return res.status(400).json({ error: 'User ID already exists' })
+    }
+
+    // Cek duplikat berdasarkan customerName
+    const existingCustomerByName = await Customer.findOne({ customerName })
+    if (existingCustomerByName) {
+      return res.status(400).json({ error: 'Customer Name already exists' })
+    }
+
     const customer = new Customer({ id, customerName, gender, address, city, province, phone })
     await customer.save()
-    res.status(201).json(customer.toJSON())
+    res.status(201).json({
+      status: 'success',
+      message: 'Create New Customer Success',
+      data: {
+        customer
+      }
+    })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
