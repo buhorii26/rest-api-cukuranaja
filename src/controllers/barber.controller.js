@@ -3,8 +3,8 @@ const Barber = require('../models/barber.model')
 // Create a new barber
 exports.createBarber = async (req, res) => {
   try {
-    const { userId, barberName, gender, address, city, province, phone, experience, skills } = req.body
-    const barber = new Barber({ userId, barberName, gender, address, city, province, phone, experience, skills })
+    const { id, barberName, gender, address, city, province, phone, experience, skills } = req.body
+    const barber = new Barber({ id, barberName, gender, address, city, province, phone, experience, skills })
     await barber.save()
     res.status(201).json(barber.toJSON())
   } catch (error) {
@@ -19,7 +19,7 @@ exports.getBarbers = async (req, res) => {
     const barbers = await Barber.find()
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'all barbers retrieved',
       data: {
         barbers
       }
@@ -36,7 +36,7 @@ exports.getBarberById = async (req, res) => {
     const barber = await Barber.findById(req.params.id)
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'barber by ID retrieved',
       data: {
         barber
       }
@@ -53,12 +53,12 @@ exports.getBarberById = async (req, res) => {
 // Update a barber by ID
 exports.updateBarber = async (req, res) => {
   try {
-    const { userId, barberName, gender, address, city, province, phone, experience, skills } = req.body
+    const { id, barberName, gender, address, city, province, phone, experience, skills } = req.body
     const barber = await Barber.findById(req.params.id)
     if (!barber) {
       return res.status(404).json({ error: 'Barber not found' })
     }
-    barber.userId = userId || barber.userId
+    barber.id = id || barber.id
     barber.barberName = barberName || barber.barberName
     barber.gender = gender || barber.gender
     barber.address = address || barber.address

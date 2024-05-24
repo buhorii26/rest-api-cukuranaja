@@ -20,6 +20,9 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: [8, 'Password harus 8 karakter']
+  },
+  avatar: {
+    type: String
   }
 })
 

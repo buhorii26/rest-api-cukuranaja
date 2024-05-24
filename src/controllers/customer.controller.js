@@ -3,8 +3,8 @@ const Customer = require('../models/customer.model')
 // Create a new customer
 exports.createCustomer = async (req, res) => {
   try {
-    const { userId, customerName, gender, address, city, province, phone } = req.body
-    const customer = new Customer({ userId, customerName, gender, address, city, province, phone })
+    const { id, customerName, gender, address, city, province, phone } = req.body
+    const customer = new Customer({ id, customerName, gender, address, city, province, phone })
     await customer.save()
     res.status(201).json(customer.toJSON())
   } catch (error) {
@@ -19,7 +19,7 @@ exports.getAllCustomers = async (req, res) => {
     const customers = await Customer.find()
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'all customers retrieved',
       data: {
         customers
       }
@@ -36,7 +36,7 @@ exports.getCustomerById = async (req, res) => {
     const customer = await Customer.findById(req.params.id)
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'customer by id retrieved',
       data: {
         customer
       }
@@ -53,12 +53,12 @@ exports.getCustomerById = async (req, res) => {
 // Update a customer by ID
 exports.updateCustomer = async (req, res) => {
   try {
-    const { userId, customerName, gender, address, city, province, phone } = req.body
+    const { id, customerName, gender, address, city, province, phone } = req.body
     const customer = await Customer.findById(req.params.id)
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' })
     }
-    customer.userId = userId || customer.userId
+    customer.id = id || customer.id
     customer.customerName = customerName || customer.customerName
     customer.gender = gender || customer.gender
     customer.address = address || customer.address

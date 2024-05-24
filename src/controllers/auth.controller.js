@@ -2,9 +2,12 @@ const User = require('../models/user.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const jwtSecret = 'my_jwt_secret'
+const axios = require('axios')
 
 exports.register = async (req, res) => {
   const { name, email, password } = req.body
+  // Generate avatar URL
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`
 
   // Custom email validation
   if (!/@*\.com$/.test(email)) {
@@ -31,7 +34,8 @@ exports.register = async (req, res) => {
     user = new User({
       name,
       email,
-      password
+      password,
+      avatar: avatarUrl
     })
 
     const salt = await bcrypt.genSalt(10)
@@ -45,14 +49,13 @@ exports.register = async (req, res) => {
       }
     }
 
-    jwt.sign(payload, jwtSecret, { expiresIn: 360000 }, (err, token) => {
+    jwt.sign(payload, jwtSecret, { expiresIn: 360000 }, (err) => {
       if (err) throw err
       res.json({
         status: 'success',
-        message: 'User Created',
+        message: 'User created successfully',
         data: {
-          user,
-          token
+          user
         }
       })
     })
