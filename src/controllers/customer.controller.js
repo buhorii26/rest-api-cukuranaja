@@ -3,11 +3,11 @@ const Customer = require('../models/customer.model')
 // Create a new customer
 exports.createCustomer = async (req, res) => {
   try {
-    const { id, customerName, gender, address, city, province, phone } = req.body
+    const { customerId, customerName, gender, address, city, province, phone } = req.body
     // Cek duplikat berdasarkan id user
-    const existingUserById = await Customer.findOne({ id })
+    const existingUserById = await Customer.findOne({ customerId })
     if (existingUserById) {
-      return res.status(400).json({ error: 'User ID already exists' })
+      return res.status(400).json({ error: 'Customer ID already exists' })
     }
 
     // Cek duplikat berdasarkan customerName
@@ -16,7 +16,7 @@ exports.createCustomer = async (req, res) => {
       return res.status(400).json({ error: 'Customer Name already exists' })
     }
 
-    const customer = new Customer({ id, customerName, gender, address, city, province, phone })
+    const customer = new Customer({ customerName, gender, address, city, province, phone })
     await customer.save()
     res.status(201).json({
       status: 'success',
@@ -71,12 +71,11 @@ exports.getCustomerById = async (req, res) => {
 // Update a customer by ID
 exports.updateCustomer = async (req, res) => {
   try {
-    const { id, customerName, gender, address, city, province, phone } = req.body
+    const { customerName, gender, address, city, province, phone } = req.body
     const customer = await Customer.findById(req.params.id)
     if (!customer) {
       return res.status(404).json({ error: 'Customer not found' })
     }
-    customer.id = id || customer.id
     customer.customerName = customerName || customer.customerName
     customer.gender = gender || customer.gender
     customer.address = address || customer.address

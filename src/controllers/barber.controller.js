@@ -3,9 +3,9 @@ const Barber = require('../models/barber.model')
 // Create a new barber
 exports.createBarber = async (req, res) => {
   try {
-    const { id, barberName, gender, address, city, province, phone, experience, skills } = req.body
+    const { barberId, barberName, gender, address, city, province, phone, experience, skills } = req.body
     // Cek duplikat berdasarkan id user
-    const existingUserById = await Barber.findOne({ id })
+    const existingUserById = await Barber.findOne({ barberId })
     if (existingUserById) {
       return res.status(400).json({ error: 'User ID already exists' })
     }
@@ -15,7 +15,7 @@ exports.createBarber = async (req, res) => {
     if (existingBarberByName) {
       return res.status(400).json({ error: 'Barber Name already exists' })
     }
-    const barber = new Barber({ id, barberName, gender, address, city, province, phone, experience, skills })
+    const barber = new Barber({ barberName, gender, address, city, province, phone, experience, skills })
     await barber.save()
     res.status(201).json({
       status: 'success',
@@ -70,12 +70,11 @@ exports.getBarberById = async (req, res) => {
 // Update a barber by ID
 exports.updateBarber = async (req, res) => {
   try {
-    const { id, barberName, gender, address, city, province, phone, experience, skills } = req.body
+    const { barberName, gender, address, city, province, phone, experience, skills } = req.body
     const barber = await Barber.findById(req.params.id)
     if (!barber) {
       return res.status(404).json({ error: 'Barber not found' })
     }
-    barber.id = id || barber.id
     barber.barberName = barberName || barber.barberName
     barber.gender = gender || barber.gender
     barber.address = address || barber.address

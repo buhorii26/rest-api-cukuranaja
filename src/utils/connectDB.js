@@ -3,7 +3,7 @@ const { CONFIG } = require('../config/db.config')
 const mongoose = require('mongoose')
 
 db.mongoose
-  .connect(CONFIG.LOCAL, {
+  .connect(CONFIG.ATLAS, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
