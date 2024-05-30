@@ -3,13 +3,7 @@ const Customer = require('../models/customer.model')
 // Create a new customer
 exports.createCustomer = async (req, res) => {
   try {
-    const { customerId, customerName, gender, address, city, province, phone } = req.body
-    // Cek duplikat berdasarkan id user
-    const existingUserById = await Customer.findOne({ customerId })
-    if (existingUserById) {
-      return res.status(400).json({ error: 'Customer ID already exists' })
-    }
-
+    const { customerName, gender, address, city, province, phone } = req.body
     // Cek duplikat berdasarkan customerName
     const existingCustomerByName = await Customer.findOne({ customerName })
     if (existingCustomerByName) {
