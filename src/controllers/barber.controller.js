@@ -3,13 +3,7 @@ const Barber = require('../models/barber.model')
 // Create a new barber
 exports.createBarber = async (req, res) => {
   try {
-    const { barberId, barberName, gender, address, city, province, phone, experience, skills } = req.body
-    // Cek duplikat berdasarkan id user
-    const existingUserById = await Barber.findOne({ barberId })
-    if (existingUserById) {
-      return res.status(400).json({ error: 'User ID already exists' })
-    }
-
+    const { barberName, gender, address, city, province, phone, experience, skills } = req.body
     // Cek duplikat berdasarkan barberName
     const existingBarberByName = await Barber.findOne({ barberName })
     if (existingBarberByName) {
