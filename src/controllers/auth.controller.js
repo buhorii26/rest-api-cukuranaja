@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
 
   // Custom email validation
   if (!/@*\.com$/.test(email)) {
-    return res.status(400).json({ msg: 'Email must end with @example.com' })
+    return res.status(400).json({ message: 'Email must end with @example.com' })
   }
   // Custom password validation
   if (password.length < 8) {
@@ -21,14 +21,14 @@ exports.register = async (req, res) => {
   }
 
   if (!name || !email || !password) {
-    return res.status(400).json({ msg: 'Please enter all fields' })
+    return res.status(400).json({ message: 'Please enter all fields' })
   }
 
   try {
     let user = await User.findOne({ email })
 
     if (user) {
-      return res.status(400).json({ msg: 'User already exists' })
+      return res.status(400).json({ message: 'User already exists' })
     }
 
     user = new User({
@@ -71,14 +71,19 @@ exports.login = async (req, res) => {
   try {
     const user = await User.findOne({ email })
 
+    // Custom email validation
+    if (!/@*\.com$/.test(email)) {
+      return res.status(400).json({ message: 'Email not valid!' })
+    }
+
     if (!user) {
-      return res.status(400).json({ msg: 'Invalid Credentials' })
+      return res.status(400).json({ message: 'Email not found!' })
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
 
     if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid Credentials' })
+      return res.status(400).json({ message: 'Invalid Credentials' })
     }
 
     const payload = {
