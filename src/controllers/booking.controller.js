@@ -6,7 +6,7 @@ const Service = require('../models/service.model')
 // create booking
 exports.createBooking = async (req, res) => {
   try {
-    const { customerId, barberId, serviceId, date, time, price, status } = req.body
+    const { customerId, barberId, serviceId, date, time, place, price, status } = req.body
     // Validate customer, barber, and service exist
     const foundCustomer = await Customer.findById(customerId)
     const foundBarber = await Barber.findById(barberId)
@@ -27,6 +27,7 @@ exports.createBooking = async (req, res) => {
       serviceId,
       date,
       time,
+      place,
       price,
       status
     })
@@ -85,7 +86,7 @@ exports.getBookingById = async (req, res) => {
 // Update a booking by ID
 exports.updateBooking = async (req, res) => {
   try {
-    const { customer, barber, service, date, time, price, status } = req.body
+    const { customer, barber, service, date, time, place, price, status } = req.body
     const booking = await Booking.findById(req.params.id)
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
@@ -95,6 +96,7 @@ exports.updateBooking = async (req, res) => {
     booking.service = service || booking.service
     booking.date = date || booking.date
     booking.time = time || booking.time
+    booking.place = place || booking.place
     booking.price = price || booking.price
     booking.status = status || booking.status
     await booking.save()

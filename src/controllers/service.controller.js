@@ -3,8 +3,8 @@ const Service = require('../models/service.model')
 // Create a new service
 exports.createService = async (req, res) => {
   try {
-    const { barberId, serviceName, price } = req.body
-    const service = new Service({ barberId, serviceName, price })
+    const { serviceName, price } = req.body
+    const service = new Service({ serviceName, price })
     await service.save()
     res.status(201).json({
       status: 'success',
@@ -59,12 +59,11 @@ exports.getServiceById = async (req, res) => {
 // Update a service by ID
 exports.updateService = async (req, res) => {
   try {
-    const { barberId, serviceName, price } = req.body
+    const { serviceName, price } = req.body
     const service = await Service.findById(req.params.id)
     if (!service) {
       return res.status(404).json({ error: 'Service not found' })
     }
-    service.barberId = barberId || service.barberId
     service.serviceName = serviceName || service.serviceName
     service.price = price || service.price
     await service.save()
