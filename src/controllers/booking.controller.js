@@ -1,34 +1,16 @@
 const Booking = require('../models/booking.model')
-const Customer = require('../models/customer.model')
-const Barber = require('../models/barber.model')
-const Service = require('../models/service.model')
 
 // create booking
 exports.createBooking = async (req, res) => {
   try {
-    const { customerId, barberId, serviceId, date, time, place, price, status } = req.body
-    // Validate customer, barber, and service exist
-    const foundCustomer = await Customer.findById(customerId)
-    const foundBarber = await Barber.findById(barberId)
-    const foundService = await Service.findById(serviceId)
-
-    if (!foundCustomer) {
-      return res.status(400).json({ msg: 'Invalid customer ID, not found!' })
-    }
-    if (!foundBarber) {
-      return res.status(400).json({ msg: 'Invalid barber ID, not found!' })
-    }
-    if (!foundService) {
-      return res.status(400).json({ msg: 'Invalid service ID, not found' })
-    }
+    const { customer, barber, service, date, time, place, status } = req.body
     const newBooking = new Booking({
-      customerId,
-      barberId,
-      serviceId,
+      customer,
+      barber,
+      service,
       date,
       time,
       place,
-      price,
       status
     })
 
@@ -49,7 +31,7 @@ exports.createBooking = async (req, res) => {
 // Get all booking
 exports.getBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().populate('customer').populate('barber').populate('service')
+    const bookings = await Booking.find().populate('customer barber service')
     res.json({
       success: true,
       message: 'all bookings retrieved',
@@ -66,7 +48,7 @@ exports.getBookings = async (req, res) => {
 // Get a booking by ID
 exports.getBookingById = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id).populate('customer').populate('barber').populate('service')
+    const booking = await Booking.findById(req.params.id).populate('customer barber service')
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
@@ -87,7 +69,7 @@ exports.getBookingById = async (req, res) => {
 exports.updateBooking = async (req, res) => {
   try {
     const { customer, barber, service, date, time, place, price, status } = req.body
-    const booking = await Booking.findById(req.params.id)
+    const booking = await Booking.findById(req.params.id).populate('customer barber service')
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
@@ -116,7 +98,7 @@ exports.updateBooking = async (req, res) => {
 // Delete a service by ID
 exports.deleteBooking = async (req, res) => {
   try {
-    const booking = await Booking.findByIdAndDelete(req.params.id)
+    const booking = await Booking.findByIdAndDelete(req.params.id).populate('customer barber service')
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }

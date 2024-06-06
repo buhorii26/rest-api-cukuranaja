@@ -2,6 +2,11 @@
 const mongoose = require('mongoose')
 
 const CustomerSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   customerName: {
     type: String,
     required: true
@@ -28,9 +33,4 @@ const CustomerSchema = new mongoose.Schema({
   }
 })
 
-CustomerSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject()
-  object.customerId = _id
-  return object
-})
 module.exports = mongoose.model('Customer', CustomerSchema)

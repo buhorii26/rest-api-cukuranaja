@@ -5,6 +5,14 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  role: {
+    type: String,
+    enum: ['customer', 'barber'],
+    required: true
+  },
+  avatar: {
+    type: String
+  },
   email: {
     type: String,
     required: true,
@@ -20,9 +28,6 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: [8, 'Password harus 8 karakter']
-  },
-  avatar: {
-    type: String
   }
 })
 

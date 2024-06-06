@@ -2,10 +2,9 @@ const User = require('../models/user.model')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const jwtSecret = 'my_jwt_secret'
-const axios = require('axios')
 
 exports.register = async (req, res) => {
-  const { name, email, password } = req.body
+  const { name, email, password, role } = req.body
   // Generate avatar URL
   const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=random&color=fff`
 
@@ -20,7 +19,12 @@ exports.register = async (req, res) => {
       .json({ msg: 'Password must be at least 8 characters long' })
   }
 
-  if (!name || !email || !password) {
+  // Validasi role
+  if (!['customer', 'barber'].includes(role)) {
+    return res.status(400).json({ message: 'Invalid role specified' })
+  }
+
+  if (!name || !role || !email || !password) {
     return res.status(400).json({ message: 'Please enter all fields' })
   }
 
@@ -33,6 +37,7 @@ exports.register = async (req, res) => {
 
     user = new User({
       name,
+      role,
       email,
       password,
       avatar: avatarUrl

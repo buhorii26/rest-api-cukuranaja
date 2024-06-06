@@ -2,6 +2,11 @@
 const mongoose = require('mongoose')
 
 const BarberSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   barberName: {
     type: String,
     required: true
@@ -36,9 +41,4 @@ const BarberSchema = new mongoose.Schema({
   }
 })
 
-BarberSchema.method('toJSON', function () {
-  const { __v, _id, ...object } = this.toObject()
-  object.barberId = _id
-  return object
-})
 module.exports = mongoose.model('Barber', BarberSchema)
