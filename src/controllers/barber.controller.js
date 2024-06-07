@@ -44,15 +44,15 @@ exports.getBarbers = async (req, res) => {
 // Get a barber by ID
 exports.getBarberById = async (req, res) => {
   try {
-    const barber = await Barber.findById(req.params.id)
+    const detailBarber = await Barber.findById(req.params.id)
     res.json({
       status: 'success',
       message: 'barber by ID retrieved',
       data: {
-        barber
+        detailBarber
       }
     })
-    if (!barber) {
+    if (!detailBarber) {
       return res.status(404).json({ error: 'Barber not found' })
     }
   } catch (error) {

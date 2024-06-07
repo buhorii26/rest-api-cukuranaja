@@ -33,7 +33,7 @@ exports.getBookings = async (req, res) => {
   try {
     const bookings = await Booking.find().populate('customer barber service')
     res.json({
-      success: true,
+      status: 'success',
       message: 'all bookings retrieved',
       data: {
         bookings
