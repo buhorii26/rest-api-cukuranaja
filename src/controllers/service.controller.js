@@ -39,15 +39,15 @@ exports.getServices = async (req, res) => {
 // Get a service by ID
 exports.getServiceById = async (req, res) => {
   try {
-    const service = await Service.findById(req.params.id)
+    const detailService = await Service.findById(req.params.id)
     res.json({
       status: 'success',
-      message: 'ok',
+      message: 'barber by ID retrieved',
       data: {
-        service
+        detailService
       }
     })
-    if (!service) {
+    if (!detailService) {
       return res.status(404).json({ error: 'Service not found' })
     }
   } catch (error) {
@@ -60,18 +60,18 @@ exports.getServiceById = async (req, res) => {
 exports.updateService = async (req, res) => {
   try {
     const { serviceName, price } = req.body
-    const service = await Service.findById(req.params.id)
-    if (!service) {
+    const detailService = await Service.findById(req.params.id)
+    if (!detailService) {
       return res.status(404).json({ error: 'Service not found' })
     }
-    service.serviceName = serviceName || service.serviceName
-    service.price = price || service.price
-    await service.save()
+    detailService.serviceName = serviceName || detailService.serviceName
+    detailService.price = price || detailService.price
+    await detailService.save()
     res.json({
       status: 'success',
       message: 'service updated success',
       data: {
-        service
+        detailService
       }
     })
   } catch (error) {
