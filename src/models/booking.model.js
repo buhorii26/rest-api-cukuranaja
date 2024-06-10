@@ -3,17 +3,17 @@ const mongoose = require('mongoose')
 
 const BookingSchema = new mongoose.Schema(
   {
-    customerId: {
+    customer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Customer',
       required: true
     },
-    barberId: {
+    barber: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Barber',
       required: true
     },
-    serviceId: {
+    service: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Service',
       required: true
@@ -30,16 +30,12 @@ const BookingSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    price: {
-      type: Number,
-      required: true
-    },
     status: {
       type: String,
       required: true
     }
   },
-  { timestamp: true }
+  { timestamps: true }
 )
 BookingSchema.method('toJSON', function () {
   const { __v, _id, ...object } = this.toObject()

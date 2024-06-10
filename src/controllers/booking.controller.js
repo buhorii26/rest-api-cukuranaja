@@ -1,40 +1,52 @@
+const mongoose = require('mongoose')
 const Booking = require('../models/booking.model')
 const Customer = require('../models/customer.model')
 const Barber = require('../models/barber.model')
 const Service = require('../models/service.model')
 
-// create booking
+// Create booking
 exports.createBooking = async (req, res) => {
   try {
-    const { customerId, barberId, serviceId, date, time, place, price, status } = req.body
-    // Validate customer, barber, and service exist
-    const foundCustomer = await Customer.findById(customerId)
-    const foundBarber = await Barber.findById(barberId)
-    const foundService = await Service.findById(serviceId)
+    const { customerId, barberId, serviceId, date, time, place, status } = req.body
 
-    if (!foundCustomer) {
-      return res.status(400).json({ msg: 'Invalid customer ID, not found!' })
+    // Validasi ID yang diberikan
+    if (!mongoose.Types.ObjectId.isValid(customerId) ||
+        !mongoose.Types.ObjectId.isValid(barberId) ||
+        !mongoose.Types.ObjectId.isValid(serviceId)) {
+      return res.status(400).json({ error: 'Invalid ID provided' })
     }
-    if (!foundBarber) {
-      return res.status(400).json({ msg: 'Invalid barber ID, not found!' })
+
+    // Cari dan validasi customer
+    const customer = await Customer.findById(customerId)
+    if (!customer) {
+      return res.status(400).json({ error: 'Invalid customer ID' })
     }
-    if (!foundService) {
-      return res.status(400).json({ msg: 'Invalid service ID, not found' })
+
+    // Cari dan validasi barber
+    const barber = await Barber.findById(barberId)
+    if (!barber) {
+      return res.status(400).json({ error: 'Invalid barber ID' })
     }
+
+    // Cari dan validasi service
+    const service = await Service.findById(serviceId)
+    if (!service) {
+      return res.status(400).json({ error: 'Invalid service ID' })
+    }
+
     const newBooking = new Booking({
-      customerId,
-      barberId,
-      serviceId,
+      customer: customerId,
+      barber: barberId,
+      service: serviceId,
       date,
       time,
       place,
-      price,
       status
     })
 
     await newBooking.save()
     res.status(201).json({
-      status: 'success',
+      success: true,
       message: 'Create New Booking Success',
       data: {
         newBooking
@@ -46,13 +58,13 @@ exports.createBooking = async (req, res) => {
   }
 }
 
-// Get all booking
+// Get all bookings
 exports.getBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().populate('customer').populate('barber').populate('service')
+    const bookings = await Booking.find().populate('customer barber service')
     res.json({
-      success: true,
-      message: 'all bookings retrieved',
+      status: 'success',
+      message: 'All bookings retrieved',
       data: {
         bookings
       }
@@ -66,13 +78,13 @@ exports.getBookings = async (req, res) => {
 // Get a booking by ID
 exports.getBookingById = async (req, res) => {
   try {
-    const booking = await Booking.findById(req.params.id).populate('customer').populate('barber').populate('service')
+    const booking = await Booking.findById(req.params.id).populate('customer barber service')
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
     res.json({
       status: 'success',
-      message: 'Booking By id Success retrived',
+      message: 'Booking retrieved by ID',
       data: {
         booking
       }
@@ -86,23 +98,24 @@ exports.getBookingById = async (req, res) => {
 // Update a booking by ID
 exports.updateBooking = async (req, res) => {
   try {
-    const { customer, barber, service, date, time, place, price, status } = req.body
-    const booking = await Booking.findById(req.params.id)
+    const { customer, barber, service, date, time, place, status } = req.body
+    const booking = await Booking.findById(req.params.id).populate('customer barber service')
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
+
     booking.customer = customer || booking.customer
     booking.barber = barber || booking.barber
     booking.service = service || booking.service
     booking.date = date || booking.date
     booking.time = time || booking.time
     booking.place = place || booking.place
-    booking.price = price || booking.price
     booking.status = status || booking.status
+
     await booking.save()
     res.json({
       status: 'success',
-      message: 'booking updated success',
+      message: 'Booking updated successfully',
       data: {
         booking
       }
@@ -113,16 +126,16 @@ exports.updateBooking = async (req, res) => {
   }
 }
 
-// Delete a service by ID
+// Delete a booking by ID
 exports.deleteBooking = async (req, res) => {
   try {
-    const booking = await Booking.findByIdAndDelete(req.params.id)
+    const booking = await Booking.findByIdAndDelete(req.params.id).populate('customer barber service')
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' })
     }
     res.json({
       status: 'success',
-      message: 'Booking deleted'
+      message: 'Booking deleted successfully'
     })
   } catch (error) {
     console.error(error)

@@ -48,7 +48,7 @@ exports.getUserById = async (req, res) => {
 // Update a user ByID
 exports.updateUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body
+    const { name, role, email, password } = req.body
     const user = await User.findById(req.user.id)
 
     if (!user) {
@@ -63,6 +63,7 @@ exports.updateUser = async (req, res) => {
 
     // Update user details
     user.name = name || user.name
+    user.role = role || user.role
     user.email = email || user.email
     if (password) {
       user.password = password

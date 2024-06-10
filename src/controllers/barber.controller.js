@@ -3,13 +3,13 @@ const Barber = require('../models/barber.model')
 // Create a new barber
 exports.createBarber = async (req, res) => {
   try {
-    const { barberName, gender, address, city, province, phone, experience, skills } = req.body
+    const { user, barberName, gender, address, city, province, phone, experience, skills } = req.body
     // Cek duplikat berdasarkan barberName
     const existingBarberByName = await Barber.findOne({ barberName })
     if (existingBarberByName) {
       return res.status(400).json({ error: 'Barber Name already exists' })
     }
-    const barber = new Barber({ barberName, gender, address, city, province, phone, experience, skills })
+    const barber = new Barber({ user, barberName, gender, address, city, province, phone, experience, skills })
     await barber.save()
     res.status(201).json({
       status: 'success',
@@ -44,15 +44,15 @@ exports.getBarbers = async (req, res) => {
 // Get a barber by ID
 exports.getBarberById = async (req, res) => {
   try {
-    const barber = await Barber.findById(req.params.id)
+    const detailBarber = await Barber.findById(req.params.id)
     res.json({
       status: 'success',
       message: 'barber by ID retrieved',
       data: {
-        barber
+        detailBarber
       }
     })
-    if (!barber) {
+    if (!detailBarber) {
       return res.status(404).json({ error: 'Barber not found' })
     }
   } catch (error) {
@@ -64,12 +64,12 @@ exports.getBarberById = async (req, res) => {
 // Update a barber by ID
 exports.updateBarber = async (req, res) => {
   try {
-    const { barberName, gender, address, city, province, phone, experience, skills } = req.body
-    const barber = await Barber.findById(req.params.id)
+    const { user, gender, address, city, province, phone, experience, skills } = req.body
+    const barber = await Barber.findById(req.params.id).populate('user')
     if (!barber) {
       return res.status(404).json({ error: 'Barber not found' })
     }
-    barber.barberName = barberName || barber.barberName
+    barber.user = user || barber.user
     barber.gender = gender || barber.gender
     barber.address = address || barber.address
     barber.city = city || barber.city
@@ -94,7 +94,7 @@ exports.updateBarber = async (req, res) => {
 // Delete a barber by ID
 exports.deleteBarber = async (req, res) => {
   try {
-    const barber = await Barber.findByIdAndDelete(req.params.id)
+    const barber = await Barber.findByIdAndDelete(req.params.id).populate('user')
     if (!barber) {
       return res.status(404).json({ error: 'Barber not found' })
     }
