@@ -35,7 +35,7 @@ const BookingSchema = new mongoose.Schema(
       required: true
     }
   },
-  { timestamp: true }
+  { timestamps: true }
 )
 BookingSchema.method('toJSON', function () {
   const { __v, _id, ...object } = this.toObject()

@@ -35,7 +35,7 @@ const CustomerSchema = new mongoose.Schema({
 
 CustomerSchema.method('toJSON', function () {
   const { __v, _id, ...object } = this.toObject()
-  object.id = _id
+  object.customerId = _id
   return object
 })
 
