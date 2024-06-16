@@ -88,7 +88,7 @@ exports.deleteService = async (req, res) => {
     if (!service) {
       return res.status(404).json({ error: 'Service not found' })
     }
-    res.json({ msg: 'Service deleted' })
+    res.json({ message: 'Service deleted' })
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: 'Server error' })
