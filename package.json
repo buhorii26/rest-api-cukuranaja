@@ -2,10 +2,11 @@
   "name": "rest-api-cukuranaja-new",
   "version": "1.0.0",
   "description": "ini adalah REST API Project Cukuran aja",
-  "main": "./src/server.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js"
   },
   "keywords": [
     "rest",
