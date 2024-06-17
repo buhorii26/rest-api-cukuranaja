@@ -45,15 +45,15 @@ exports.getAllCustomers = async (req, res) => {
 // Get a customer by ID
 exports.getCustomerById = async (req, res) => {
   try {
-    const customer = await Customer.findById(req.params.id).populate('user')
+    const detailCustomer = await Customer.findById(req.params.id)
     res.json({
       status: 'success',
       message: 'customer by id retrieved',
       data: {
-        customer
+        detailCustomer
       }
     })
-    if (!customer) {
+    if (!detailCustomer) {
       return res.status(404).json({ error: 'Customer not found' })
     }
   } catch (error) {
